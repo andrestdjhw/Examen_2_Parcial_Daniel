@@ -5,8 +5,13 @@ var cookieParser = require('cookie-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 
+function initApp(db){
+
+
+
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var apiRouter=require('./routes/api')(db);
+  
 
 var app = express();
 
@@ -22,7 +27,7 @@ app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -39,5 +44,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+   return app;
+}//initApp
 module.exports = app;
